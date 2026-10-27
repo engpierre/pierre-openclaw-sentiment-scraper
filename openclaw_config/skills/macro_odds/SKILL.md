@@ -1,7 +1,8 @@
 ---
-name: macro-odds
+name: macro_odds
 description: Smart-money prediction market odds and institutional news harvester querying Polymarket, Kalshi, and Finnhub (with Yahoo RSS fallback).
-version: 1.0.0
+version: 1.1.0
+user-invocable: true
 ---
 
 # Macro Odds & News Baseline Skill (Tier 1 Smart-Money Baseline)
@@ -9,11 +10,11 @@ version: 1.0.0
 ## Overview
 Wraps `harvesters/odds_news_baseline.py` to extract decentralized prediction market probabilities (Polymarket and Kalshi) alongside institutional headline news from Finnhub or Yahoo Finance RSS.
 
-## CLI Invocation
-Execute via the local isolated Python 3.11 virtual environment:
+## Exact CLI Invocation
+Execute directly using 100% absolute Windows paths:
 
 ```powershell
-.\.venv\Scripts\python.exe harvesters/odds_news_baseline.py --ticker <TICKER> --limit 15
+C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\.venv\Scripts\python.exe C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\harvesters\odds_news_baseline.py --ticker <TICKER> --limit 15
 ```
 
 ### Arguments
@@ -63,3 +64,13 @@ The script returns strictly valid JSON to `stdout`:
 ## Circuit Breaker & Fallback Protocol
 - `FINNHUB_API_KEY`: If not provided in environment, the harvester automatically executes with Yahoo Finance RSS, ensuring zero unhandled exceptions or crashes.
 - If Polymarket or Kalshi APIs return HTTP 429/403 or schema shifts, individual source circuit breakers degrade gracefully while news parsing continues.
+
+## Stop Conditions & Output Format
+1. **Strict Isolation Rule:** NEVER search for, reference, or execute `16_sentiment_harvester`, `run_single_dossier.py`, `orchestration`, or any legacy trading scripts outside `C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\`.
+2. **Deterministic Output:** Run ONLY the command specified above.
+3. **Natural Language Synthesis:** Present a clean, natural-language summary to the user highlighting:
+   - Primary Institutional News Themes & Major Headlines
+   - Prediction Market Probability Context (Polymarket & Kalshi Contracts)
+   - Macro Alignment Assessment (Bullish/Neutral/Bearish)
+   - Circuit Breaker Health Status
+   *(Do NOT output raw JSON unless the user explicitly requests raw JSON).*

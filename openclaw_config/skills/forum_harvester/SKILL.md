@@ -1,7 +1,8 @@
 ---
-name: forum-harvester
+name: forum_harvester
 description: Passive retail sentiment and cashtag momentum harvester querying Reddit (r/wallstreetbets, r/stocks, r/investing), HackerNews Algolia, and StockTwits streams with Yahoo RSS fallback.
-version: 1.0.0
+version: 1.1.0
+user-invocable: true
 ---
 
 # Forum & Cashtag Harvester Skill (Tier 2 Retail Momentum)
@@ -9,15 +10,15 @@ version: 1.0.0
 ## Overview
 Wraps `harvesters/reddit_stocktwits.py` to collect passive retail chatter, cashtag velocity, and keyword sentiment polarity without requiring user logins or elevated API keys.
 
-## CLI Invocation
-Execute via the local isolated Python 3.11 virtual environment:
+## Exact CLI Invocation
+Execute directly using 100% absolute Windows paths:
 
 ```powershell
-.\.venv\Scripts\python.exe harvesters/reddit_stocktwits.py --ticker <TICKER> --limit 15
+C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\.venv\Scripts\python.exe C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\harvesters\reddit_stocktwits.py --ticker <TICKER> --limit 15
 ```
 
 ### Arguments
-- `--ticker`: Stock or crypto symbol (e.g., `ORCL`, `NVDA`, `BTC-USD`). Required.
+- `--ticker`: Stock or crypto symbol (e.g., `ORCL`, `NVDA`, `SPY`). Required.
 - `--limit`: Maximum number of entries to sample per source (default: `15`).
 
 ## Telemetry Contract (stdout JSON)
@@ -58,4 +59,13 @@ The script returns strictly valid JSON to `stdout`:
 ## Circuit Breaker Handling
 - If any external endpoint returns HTTP 429 or 403, the source is marked `"status": "DEGRADED"`.
 - If StockTwits is degraded or Cloudflare-blocked, the harvester automatically activates Yahoo Finance Community RSS fallback.
-- The supervisor suppresses alerts unless `overall_status` trips to `"TRIPPED"`.
+
+## Stop Conditions & Output Format
+1. **Strict Isolation Rule:** NEVER search for, reference, or execute `16_sentiment_harvester`, `run_single_dossier.py`, `orchestration`, or any legacy trading scripts outside `C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\`.
+2. **Deterministic Output:** Run ONLY the command specified above.
+3. **Natural Language Synthesis:** Present a clean, natural-language summary to the user highlighting:
+   - Sample Size & 24h Chatter Velocity
+   - Bullish Ratio & Sentiment Polarity (Positive vs Negative)
+   - Top Retail Discussion Themes & Excerpts
+   - Circuit Breaker Health Status
+   *(Do NOT output raw JSON unless the user explicitly requests raw JSON).*

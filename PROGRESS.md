@@ -55,6 +55,12 @@
 - [x] Execute full active watchlist dry run across `ORCL`, `NVDA`, `MSFT`, `SPY` (All 4 assets processed, verified valid risk modifiers)
 - [x] Validate end-to-end telemetry consumption and schema conformity for downstream desk reviews
 
+### Phase 6: Global OpenClaw Skill Registration & Absolute Path Hardening
+- [x] Harden 3 Harvester `SKILL.md` with absolute Windows paths, `user-invocable: true`, and strict stop conditions preventing legacy execution
+- [x] Create 4th master skill `crowd_sentinel_forum/SKILL.md` wrapping `synthesis/agent_forum.py`
+- [x] Deploy all 4 skills to OpenClaw global and workspace locations (`~/.openclaw/skills`, `~/.openclaw/workspace/skills`, `~/.openclaw/workspace/pierre-quant/skills`, `~/.openclaw/workspace-supervisor/skills`, `tools/skills`)
+- [x] Verify OpenClaw skill registry readiness via `openclaw skills check --agent main` and `openclaw skills info` (All 4 skills marked Ready, Command Visible, and Model Visible)
+
 ---
 
 ## 🛠️ Build Log & Component Verification Table
@@ -82,4 +88,7 @@
 | **2026-10-27** | Phase 4 | Git Phase 4 Commit & Push | ✅ Verified | Commit `2781922` pushed to `origin main` |
 | **2026-10-27** | Phase 5 | `synthesis/agent_forum.py` | ✅ Verified | Orchestrator connecting 3 harvesters + Gemma 4 26B synthesis |
 | **2026-10-27** | Phase 5 | Watchlist Run (`ORCL, NVDA, MSFT, SPY`) | ✅ Verified | Full 4-asset end-to-end run completed; atomic JSON updated |
-| **2026-10-27** | Phase 5 | Operational Sign-off | 🟢 **PRODUCTION READY** | Version 1.0.0 finalized, tested, committed, pushed, and mirrored |
+| **2026-10-27** | Phase 5 | Git Phase 5 Commit & Push | ✅ Verified | Commit `c0bfc0b` pushed to `origin main` |
+| **2026-10-27** | Phase 6 | Path Hardening (All 4 `SKILL.md`) | ✅ Verified | 100% absolute paths + explicit anti-legacy isolation rules |
+| **2026-10-27** | Phase 6 | Global OpenClaw Deployment | ✅ Verified | Synced to `~/.openclaw/skills`, `workspace/skills`, `pierre-quant/skills` |
+| **2026-10-27** | Phase 6 | CLI Skill Verification | 🟢 **ACTIVE & READY** | Verified via `openclaw skills check --agent main` (4/4 ready & modelVisible) |

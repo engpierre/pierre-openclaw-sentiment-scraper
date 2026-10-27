@@ -1,7 +1,8 @@
 ---
-name: video-transcript
+name: video_transcript
 description: Finfluencer and spoken video transcript harvester extracting account-free YouTube video metadata, captions, and retail euphoria trigger density.
-version: 1.0.0
+version: 1.1.0
+user-invocable: true
 ---
 
 # Video Transcript Harvester Skill (Tier 3 Finfluencer Euphoria)
@@ -9,11 +10,11 @@ version: 1.0.0
 ## Overview
 Wraps `harvesters/transcript_miner.py` using `yt-dlp` and `youtube-transcript-api` to discover top retail videos, parse spoken subtitles/captions, and scan for high-hype finfluencer triggers (`10x`, `moon`, `urgent`, `millionaire`, `parabolic`, `next nvidia`).
 
-## CLI Invocation
-Execute via the local isolated Python 3.11 virtual environment:
+## Exact CLI Invocation
+Execute directly using 100% absolute Windows paths:
 
 ```powershell
-.\.venv\Scripts\python.exe harvesters/transcript_miner.py --ticker <TICKER> --limit 5
+C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\.venv\Scripts\python.exe C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\harvesters\transcript_miner.py --ticker <TICKER> --limit 5
 ```
 
 ### Arguments
@@ -60,3 +61,13 @@ The script returns strictly valid JSON to `stdout`:
 - `hype_trigger_density >= 0.35` -> `retail_euphoria_risk: "MODERATE"`
 - `hype_trigger_density < 0.35` -> `retail_euphoria_risk: "LOW"`
 - If YouTube blocks search requests or rate limits occur, `circuit_breaker.status` transitions to `"DEGRADED"`.
+
+## Stop Conditions & Output Format
+1. **Strict Isolation Rule:** NEVER search for, reference, or execute `16_sentiment_harvester`, `run_single_dossier.py`, `orchestration`, or any legacy trading scripts outside `C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\`.
+2. **Deterministic Output:** Run ONLY the command specified above.
+3. **Natural Language Synthesis:** Present a clean, natural-language summary to the user highlighting:
+   - Total Videos Sampled & Aggregate Viewership
+   - Finfluencer Hype Trigger Density (Scale 0.0 to 1.0)
+   - Retail Overcrowding / Euphoria Risk Level (`LOW`, `MODERATE`, `HIGH`, `EXTREME`)
+   - Key Spoken Transcript Themes from Creators
+   *(Do NOT output raw JSON unless the user explicitly requests raw JSON).*
