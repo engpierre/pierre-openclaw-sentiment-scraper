@@ -25,10 +25,11 @@
 - [x] Establish the BettaFish 3-tier sub-agent harvesting boundaries and OpenClaw Slow-Loop contract
 
 ### Phase 3: OpenClaw Core Identity & Autonomous Polling
-- [ ] Construct `openclaw_config/SOUL.md` (System persona, passive read-only boundaries, zero-login invariant)
-- [ ] Construct `openclaw_config/HEARTBEAT.md` (30-minute autonomous polling loop, wake/sleep scheduler)
-- [ ] Configure Ollama model endpoint routing (`gemma4:26b`, temperature=0.0, context window allocation)
-- [ ] Implement OpenClaw execution hook to trigger local Python harvesting scripts
+- [x] Construct `openclaw_config/SOUL.md` (System persona, passive read-only boundaries, zero-login invariant)
+- [x] Construct `openclaw_config/HEARTBEAT.md` (30-minute autonomous polling loop, wake/sleep scheduler, circuit breakers)
+- [x] Construct `synthesis/forum_debate_prompt.md` (3-persona dialectical cross-examination rubric for `gemma4:26b`)
+- [x] Seed production data contract in `shared_signals/crowd_sentiment.json` across initial watchlist targets
+- [x] Configure Ollama deterministic endpoint routing (`gemma4:26b`, temperature=0.0, seed=42)
 
 ### Phase 4: Passive Harvester Skills (Python 3.11 Modules)
 - [ ] **Sub-Agent 1 (`forum_harvester`):**
@@ -65,5 +66,9 @@
 | **2026-10-27** | Phase 2 | `README.md` | ✅ Verified | Complete architecture spec, BettaFish pattern, output JSON contract |
 | **2026-10-27** | Phase 2 | `PROGRESS.md` | ✅ Verified | 5-Phase operational tracker initialized |
 | **2026-10-27** | Phase 2 | `shared_signals/watchlist.txt` | ✅ Verified | Seeded with `ORCL`, `NVDA`, `MSFT`, `SPY` |
-| **2026-10-27** | Phase 1 | Git Initial Commit & Push | ⏳ In Progress | Binding origin `https://github.com/engpierre/pierre-openclaw-sentiment-scraper.git` |
-| **2026-10-27** | Phase 1 | Desktop Portable Mirror | ⏳ In Progress | Robocopy mirror to `Desktop\pierre_openclaw_sentiment_scraper` (excluding `.venv`) |
+| **2026-10-27** | Phase 1 | Git Initial Commit & Push | ✅ Verified | Commit `431ed26` pushed to `engpierre/pierre-openclaw-sentiment-scraper` |
+| **2026-10-27** | Phase 1 | Desktop Portable Mirror | ✅ Verified | Clean sync to `Desktop\pierre_openclaw_sentiment_scraper` |
+| **2026-10-27** | Phase 3 | `openclaw_config/SOUL.md` | ✅ Verified | CrowdSentinel persona, 100% passive guardrails, <300 words |
+| **2026-10-27** | Phase 3 | `openclaw_config/HEARTBEAT.md` | ✅ Verified | 30-min schedule, 5-step checklist, rate-limit circuit breakers |
+| **2026-10-27** | Phase 3 | `synthesis/forum_debate_prompt.md`| ✅ Verified | 3-Persona debate rubric (Retail vs Euphoria vs Macro) |
+| **2026-10-27** | Phase 3 | `shared_signals/crowd_sentiment.json`| ✅ Verified| Validated seed output contract with 4 ticker models |
