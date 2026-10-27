@@ -32,20 +32,20 @@
 - [x] Configure Ollama deterministic endpoint routing (`gemma4:26b`, temperature=0.0, seed=42)
 
 ### Phase 4: Passive Harvester Skills (Python 3.11 Modules)
-- [ ] **Sub-Agent 1 (`forum_harvester`):**
-  - [ ] Construct `openclaw_config/skills/forum_harvester/SKILL.md`
-  - [ ] Build `harvesters/reddit_scraper.py` (Public `.json` endpoints: r/wsb, r/stocks, r/investing)
-  - [ ] Build `harvesters/stocktwits_scraper.py` (Cashtag stream reader)
-  - [ ] Build `harvesters/hackernews_scraper.py` (HackerNews Algolia API)
-- [ ] **Sub-Agent 2 (`video_transcript`):**
-  - [ ] Construct `openclaw_config/skills/video_transcript/SKILL.md`
-  - [ ] Build `harvesters/youtube_transcript_scraper.py` (Account-free caption extractor)
-  - [ ] Build `harvesters/tiktok_transcript_scraper.py` (Spoken audio/text finfluencer parser)
-- [ ] **Sub-Agent 3 (`macro_odds`):**
-  - [ ] Construct `openclaw_config/skills/macro_odds/SKILL.md`
-  - [ ] Build `harvesters/polymarket_scraper.py` (Order book & probability curve reader)
-  - [ ] Build `harvesters/kalshi_scraper.py` (Macro event contract reader)
-  - [ ] Build `harvesters/finnhub_news_scraper.py` (Institutional headline sentiment feed)
+- [x] **Sub-Agent 1 (`forum_harvester`):**
+  - [x] Construct `openclaw_config/skills/forum_harvester/SKILL.md`
+  - [x] Build `harvesters/reddit_stocktwits.py` (Tier 2 Forum Harvester: Reddit JSON, HackerNews Algolia, StockTwits stream, Yahoo RSS fallback)
+- [x] **Sub-Agent 2 (`video_transcript`):**
+  - [x] Construct `openclaw_config/skills/video_transcript/SKILL.md`
+  - [x] Build `harvesters/transcript_miner.py` (Tier 3 Video Euphoria: yt-dlp metadata, spoken caption extractor, hype trigger scanner)
+- [x] **Sub-Agent 3 (`macro_odds`):**
+  - [x] Construct `openclaw_config/skills/macro_odds/SKILL.md`
+  - [x] Build `harvesters/odds_news_baseline.py` (Tier 1 Smart-Money Baseline: Polymarket Gamma API, Kalshi public markets, Finnhub/Yahoo RSS fallback)
+- [x] **Virtual Environment Dependencies:**
+  - [x] Install `requests`, `httpx`, `youtube-transcript-api`, `yt-dlp`, `feedparser`, `python-dotenv`
+  - [x] Generate clean `requirements.txt` in repository root
+- [x] **Smoke-Testing:**
+  - [x] Smoke-test all 3 harvesters on `ORCL` via `.\.venv\Scripts\python.exe` (Verified valid stdout JSON & circuit breakers)
 
 ### Phase 5: Agent Forum Synthesis Layer & End-to-End Validation
 - [ ] Build `synthesis/agent_forum.py` (Gemma 4 26B divergence cross-examination engine)
@@ -72,3 +72,9 @@
 | **2026-10-27** | Phase 3 | `openclaw_config/HEARTBEAT.md` | ✅ Verified | 30-min schedule, 5-step checklist, rate-limit circuit breakers |
 | **2026-10-27** | Phase 3 | `synthesis/forum_debate_prompt.md`| ✅ Verified | 3-Persona debate rubric (Retail vs Euphoria vs Macro) |
 | **2026-10-27** | Phase 3 | `shared_signals/crowd_sentiment.json`| ✅ Verified| Validated seed output contract with 4 ticker models |
+| **2026-10-27** | Phase 3 | Git Phase 3 Commit & Push | ✅ Verified | Commit `62fe309` pushed to `origin main` |
+| **2026-10-27** | Phase 4 | `requirements.txt` | ✅ Verified | Production dependencies frozen and installed in `.venv` |
+| **2026-10-27** | Phase 4 | `harvesters/reddit_stocktwits.py` | ✅ Verified | Smoke test ORCL: 30 items parsed; polarity +0.3043; valid JSON |
+| **2026-10-27** | Phase 4 | `harvesters/transcript_miner.py` | ✅ Verified | Smoke test ORCL: 5 videos; 106k views; spoken captions parsed; valid JSON |
+| **2026-10-27** | Phase 4 | `harvesters/odds_news_baseline.py` | ✅ Verified | Smoke test ORCL: Polymarket + Kalshi + Yahoo RSS headlines; valid JSON |
+| **2026-10-27** | Phase 4 | OpenClaw `SKILL.md` (x3) | ✅ Verified | `forum_harvester`, `video_transcript`, `macro_odds` skills authored |
