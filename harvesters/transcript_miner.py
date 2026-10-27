@@ -40,22 +40,32 @@ EUPHORIA_TRIGGERS = [
 COMPILED_EUPHORIA = [re.compile(pat, re.IGNORECASE) for pat in EUPHORIA_TRIGGERS]
 
 
-def extract_transcript_text(video_id: str) -> str:
-    """Safely retrieve video transcript text across youtube_transcript_api versions."""
-    try:
-        yta = YouTubeTranscriptApi()
-        if hasattr(yta, "fetch"):
-            fetched = yta.fetch(video_id)
-            if hasattr(fetched, "snippets"):
-                return " ".join(s.text for s in fetched.snippets)
-            elif hasattr(fetched, "to_raw_data"):
-                return " ".join(s.get("text", "") for s in fetched.to_raw_data())
-        if hasattr(YouTubeTranscriptApi, "get_transcript"):
-            raw = YouTubeTranscriptApi.get_transcript(video_id)
-            return " ".join(s.get("text", "") for s in raw)
-    except Exception:
-        pass
-    return ""
+import concurrent.futures
+
+def extract_transcript_text(video_id: str, timeout_sec: float = 3.5) -> str:
+    """Safely retrieve video transcript text with a strict timeout to prevent hangs."""
+    def _fetch():
+        try:
+            yta = YouTubeTranscriptApi()
+            if hasattr(yta, "fetch"):
+                fetched = yta.fetch(video_id)
+                if hasattr(fetched, "snippets"):
+                    return " ".join(s.text for s in fetched.snippets)
+                elif hasattr(fetched, "to_raw_data"):
+                    return " ".join(s.get("text", "") for s in fetched.to_raw_data())
+            if hasattr(YouTubeTranscriptApi, "get_transcript"):
+                raw = YouTubeTranscriptApi.get_transcript(video_id)
+                return " ".join(s.get("text", "") for s in raw)
+        except Exception:
+            pass
+        return ""
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(_fetch)
+        try:
+            return future.result(timeout=timeout_sec)
+        except Exception:
+            return ""
 
 
 def scan_euphoria_triggers(text: str) -> Dict[str, Any]:
@@ -74,14 +84,15 @@ def scan_euphoria_triggers(text: str) -> Dict[str, Any]:
 
 def harvest_youtube_videos(ticker: str, limit: int) -> Dict[str, Any]:
     circuit_breaker = {"status": "OK", "error_code": None, "source": "youtube"}
-    search_query = f"ytsearch{min(limit, 8)}:{ticker} stock analysis"
+    sample_limit = min(limit, 5)
+    search_query = f"ytsearch{sample_limit}:{ticker} stock analysis"
 
     ydl_opts = {
         "quiet": True,
         "no_warnings": True,
         "skip_download": True,
-        "extract_flat": False,
-        "socket_timeout": 10,
+        "extract_flat": True,
+        "socket_timeout": 5,
     }
 
     videos: List[Dict[str, Any]] = []
@@ -91,7 +102,7 @@ def harvest_youtube_videos(ticker: str, limit: int) -> Dict[str, Any]:
             search_res = ydl.extract_info(search_query, download=False)
             entries = search_res.get("entries", []) if search_res else []
 
-            for entry in entries:
+            for entry in entries[:sample_limit]:
                 if not entry:
                     continue
                 video_id = entry.get("id")
@@ -99,14 +110,14 @@ def harvest_youtube_videos(ticker: str, limit: int) -> Dict[str, Any]:
                 view_count = entry.get("view_count") or 0
                 upload_date = entry.get("upload_date") or ""
                 uploader = entry.get("uploader") or ""
-                webpage_url = entry.get("webpage_url") or f"https://www.youtube.com/watch?v={video_id}"
+                webpage_url = entry.get("url") or f"https://www.youtube.com/watch?v={video_id}"
 
-                # Extract spoken transcript if available
-                transcript_text = extract_transcript_text(video_id) if video_id else ""
-                transcript_snippet = transcript_text[:1500]
+                # Extract spoken transcript with fast timeout
+                transcript_text = extract_transcript_text(video_id, timeout_sec=3.0) if video_id else ""
+                transcript_snippet = transcript_text[:1200]
 
                 # Euphoria scan across title + description + transcript
-                corpus = f"{title} {entry.get('description', '')[:500]} {transcript_snippet}"
+                corpus = f"{title} {entry.get('description', '')[:300]} {transcript_snippet}"
                 fomo_scan = scan_euphoria_triggers(corpus)
 
                 videos.append({
@@ -132,7 +143,7 @@ def harvest_youtube_videos(ticker: str, limit: int) -> Dict[str, Any]:
 def main():
     parser = argparse.ArgumentParser(description="Tier 3 Finfluencer & Video Transcript Harvester")
     parser.add_argument("--ticker", required=True, help="Stock or crypto ticker symbol (e.g. ORCL, NVDA)")
-    parser.add_argument("--limit", type=int, default=5, help="Number of videos to sample (default: 5)")
+    parser.add_argument("--limit", type=int, default=3, help="Number of videos to sample (default: 3)")
     args = parser.parse_args()
 
     ticker = args.ticker.upper().strip()

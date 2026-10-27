@@ -1,94 +1,31 @@
 {
-  "timestamp": "2026-10-27T20:44:25Z",
-  "generated_at_edt": "2026-10-27 16:44:25 EDT",
-  "pipeline_version": "1.0.0",
+  "timestamp": "2026-10-27T21:10:20Z",
+  "generated_at_edt": "2026-10-27 17:10:20 EDT",
+  "pipeline_version": "1.1.0",
   "orchestrator": "OpenClaw_CrowdSentinel",
-  "model": "gemma4:26b",
+  "model": "deterministic_rubric",
   "temperature": 0.0,
   "assets": {
     "ORCL": {
       "ticker": "ORCL",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.5909,
-        "chatter_velocity_zscore": 1.5,
+        "reddit_stocktwits_sentiment": 0.6667,
+        "chatter_velocity_zscore": 3.0,
         "video_transcript_hype_velocity": 0.0,
         "polymarket_macro_alignment": 0.9,
         "retail_euphoria_risk": "LOW"
       },
       "forum_synthesis": {
-        "consensus_regime": "STEADY_ACCUMULATION",
-        "divergence_flag": "NONE",
-        "key_drivers": [
-          "Voice A forum sentiment stable at 0.59",
-          "Voice B video transcript hype well-contained at 0.00",
-          "Voice C macro alignment in balance at 0.90"
-        ],
-        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
-      },
-      "recommended_risk_modifier": 1.0
-    },
-    "NVDA": {
-      "ticker": "NVDA",
-      "metrics": {
-        "reddit_stocktwits_sentiment": 0.6364,
-        "chatter_velocity_zscore": 1.5,
-        "video_transcript_hype_velocity": 0.0,
-        "polymarket_macro_alignment": 0.8,
-        "retail_euphoria_risk": "LOW"
-      },
-      "forum_synthesis": {
         "consensus_regime": "BULLISH_CONFLUENCE",
         "divergence_flag": "NONE",
         "key_drivers": [
-          "Voice A demonstrates positive retail accumulation at 0.64",
-          "Voice C institutional news confirms constructive momentum at 0.80",
+          "Voice A demonstrates positive retail accumulation at 0.67",
+          "Voice C institutional news confirms constructive momentum at 0.90",
           "Voice B euphoria triggers remain within healthy, non-overheated limits"
         ],
         "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
       },
       "recommended_risk_modifier": 1.05
-    },
-    "MSFT": {
-      "ticker": "MSFT",
-      "metrics": {
-        "reddit_stocktwits_sentiment": 0.8095,
-        "chatter_velocity_zscore": 1.5,
-        "video_transcript_hype_velocity": 0.0,
-        "polymarket_macro_alignment": 0.75,
-        "retail_euphoria_risk": "LOW"
-      },
-      "forum_synthesis": {
-        "consensus_regime": "BULLISH_CONFLUENCE",
-        "divergence_flag": "NONE",
-        "key_drivers": [
-          "Voice A demonstrates positive retail accumulation at 0.81",
-          "Voice C institutional news confirms constructive momentum at 0.75",
-          "Voice B euphoria triggers remain within healthy, non-overheated limits"
-        ],
-        "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
-      },
-      "recommended_risk_modifier": 1.05
-    },
-    "SPY": {
-      "ticker": "SPY",
-      "metrics": {
-        "reddit_stocktwits_sentiment": 0.2857,
-        "chatter_velocity_zscore": 1.5,
-        "video_transcript_hype_velocity": 0.1333,
-        "polymarket_macro_alignment": 0.67,
-        "retail_euphoria_risk": "LOW"
-      },
-      "forum_synthesis": {
-        "consensus_regime": "CAPITULATION_ACCUMULATION",
-        "divergence_flag": "RETAIL_PANIC_DISLOCATION",
-        "key_drivers": [
-          "Voice A captures retail capitulation and panic sentiment at 0.29",
-          "Voice B detects near-zero finfluencer interest and negative buzz",
-          "Voice C institutional contracts remain firm with alignment at 0.67"
-        ],
-        "summary": "Retail panic selling has created an asymmetric dislocation while institutional baseline remains stable. Asymmetric risk expansion favored."
-      },
-      "recommended_risk_modifier": 1.15
     }
   }
 }

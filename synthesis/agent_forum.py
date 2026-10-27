@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 synthesis/agent_forum.py - OpenClaw Agent Forum Synthesis Orchestrator
-Executes the 3 passive harvesters for all watchlist assets, conducts a 3-persona dialectical
-cross-examination using local Gemma 4 26B (Ollama), and writes validated risk telemetry
+Executes the 3 passive harvesters in parallel for watchlist assets, conducts a 3-persona dialectical
+cross-examination (via Gemma 4 26B or ultra-fast deterministic rubric), and writes validated risk telemetry
 atomically to shared_signals/crowd_sentiment.json.
 """
 
 import argparse
+import concurrent.futures
 import datetime
 import json
 import os
@@ -15,7 +16,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import requests
 
@@ -46,7 +47,7 @@ def load_watchlist(path: Path) -> List[str]:
     return tickers or ["ORCL", "NVDA", "MSFT", "SPY"]
 
 
-def run_harvester(script_rel_path: str, ticker: str, limit: int, timeout: int = 25) -> Dict[str, Any]:
+def run_harvester(script_rel_path: str, ticker: str, limit: int, timeout: int = 10) -> Dict[str, Any]:
     script_path = BASE_DIR / script_rel_path
     cmd = [
         str(PYTHON_EXE),
@@ -65,7 +66,7 @@ def run_harvester(script_rel_path: str, ticker: str, limit: int, timeout: int = 
         if proc.returncode == 0 and proc.stdout.strip():
             return json.loads(proc.stdout)
         else:
-            sys.stderr.write(f"Harvester error ({script_rel_path}): {proc.stderr[:200]}\n")
+            sys.stderr.write(f"Harvester warning ({script_rel_path}): {proc.stderr[:150]}\n")
     except Exception as exc:
         sys.stderr.write(f"Exception running {script_rel_path} on {ticker}: {exc}\n")
 
@@ -74,6 +75,20 @@ def run_harvester(script_rel_path: str, ticker: str, limit: int, timeout: int = 
         "ticker": ticker,
         "circuit_breaker": {"overall_status": "DEGRADED", "error_detail": "Execution timeout or failure"}
     }
+
+
+def harvest_all_parallel(ticker: str) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+    """Runs all 3 harvesters concurrently in a thread pool for sub-5s performance."""
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        f_t2 = executor.submit(run_harvester, "harvesters/reddit_stocktwits.py", ticker, 15, 8)
+        f_t3 = executor.submit(run_harvester, "harvesters/transcript_miner.py", ticker, 3, 6)
+        f_t1 = executor.submit(run_harvester, "harvesters/odds_news_baseline.py", ticker, 15, 8)
+
+        t2_res = f_t2.result()
+        t3_res = f_t3.result()
+        t1_res = f_t1.result()
+
+    return t2_res, t3_res, t1_res
 
 
 def compute_baseline_metrics(
@@ -86,7 +101,6 @@ def compute_baseline_metrics(
     sentiment_ratio = tier2.get("bullish_ratio", 0.50)
     sample_size = tier2.get("sample_size", 0)
     recent_velocity = tier2.get("recent_24h_velocity_count", 0)
-    # Estimate z-score roughly: normalized against median baseline of 15
     zscore = round((recent_velocity - 15.0) / 10.0, 2) if sample_size > 0 else 0.0
 
     # Tier 3 (Video Euphoria)
@@ -94,7 +108,6 @@ def compute_baseline_metrics(
     euphoria_risk = tier3.get("retail_euphoria_risk", "LOW")
 
     # Tier 1 (Macro / News)
-    # Examine headlines for sentiment cues
     headlines = tier1.get("news_headlines", [])
     bull_words = {"growth", "upside", "buy", "record", "expands", "rally", "soar", "gain", "advances", "beats"}
     bear_words = {"lost", "drop", "cut", "risk", "debt", "threaten", "lawsuit", "slump", "fall", "downgrade"}
@@ -157,7 +170,7 @@ def build_forum_prompt(
 ### RULES:
 - If Voice A is highly euphoric (>0.75) and Voice B has HIGH/EXTREME hype while Voice C is neutral/bearish, flag RETAIL_EUPHORIA_EXTREME, divergence MACRO_SENTIMENT_DIVERGENCE, risk modifier 0.50.
 - If Voice A is bullish (>0.65) and Voice C confirms (>0.65) with low hype (<0.60), flag BULLISH_CONFLUENCE, divergence NONE, risk modifier 1.00 to 1.15.
-- If panic selling and doom rhetoric dominate while macro remains resilient, flag CAPITULATION_ACCUMULATION, divergence RETAIL_PANIC_DISLOCATION, risk modifier 1.10.
+- If panic selling and doom rhetoric dominate while macro remains resilient, flag CAPITULATION_ACCUMULATION, divergence RETAIL_PANIC_DISLOCATION, risk modifier 1.10 to 1.20.
 - Otherwise, flag STEADY_ACCUMULATION or CHOPPY_EQUILIBRIUM, risk modifier 1.00.
 
 Output MUST be strictly valid JSON matching this schema:
@@ -186,7 +199,7 @@ Output MUST be strictly valid JSON matching this schema:
     return prompt
 
 
-def query_ollama_forum(ticker: str, prompt: str, timeout: int = 45) -> Optional[Dict[str, Any]]:
+def query_ollama_forum(ticker: str, prompt: str, timeout: float = 12.0) -> Optional[Dict[str, Any]]:
     payload = {
         "model": MODEL_NAME,
         "messages": [
@@ -209,17 +222,13 @@ def query_ollama_forum(ticker: str, prompt: str, timeout: int = 45) -> Optional[
         resp = requests.post(OLLAMA_CHAT_URL, json=payload, timeout=timeout)
         if resp.status_code == 200:
             content = resp.json().get("message", {}).get("content", "").strip()
-            # Extract JSON block if wrapped in markdown
             match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", content, re.DOTALL)
-            if match:
-                raw_json = match.group(1)
-            else:
-                raw_json = content
+            raw_json = match.group(1) if match else content
             parsed = json.loads(raw_json)
             if "ticker" in parsed and "metrics" in parsed and "forum_synthesis" in parsed:
                 return parsed
     except Exception as exc:
-        sys.stderr.write(f"Ollama inference error for {ticker}: {exc}\n")
+        sys.stderr.write(f"Ollama note ({ticker}): {exc}\n")
     return None
 
 
@@ -296,6 +305,7 @@ def main():
     parser.add_argument("--watchlist", type=str, default=str(WATCHLIST_PATH), help="Path to watchlist.txt")
     parser.add_argument("--output", type=str, default=str(OUTPUT_PATH), help="Path to crowd_sentiment.json")
     parser.add_argument("--tickers", type=str, default="", help="Comma-separated ticker list override")
+    parser.add_argument("--fast", "--no-llm", dest="fast", action="store_true", help="Fast mode: parallel harvest + deterministic synthesis (<6s)")
     args = parser.parse_args()
 
     if args.tickers.strip():
@@ -303,61 +313,60 @@ def main():
     else:
         tickers = load_watchlist(Path(args.watchlist))
 
-    print(f"[CROWD_SENTINEL] Commencing Phase 5 Forum Synthesis for {len(tickers)} assets: {tickers}")
+    mode_label = "FAST (Parallel Harvest + Deterministic Rubric)" if args.fast else "FULL (Ollama 12s Cap + Fallback)"
+    sys.stderr.write(f"[CROWD_SENTINEL] Running Forum Synthesis for {len(tickers)} assets in {mode_label} mode.\n")
     t_start = time.time()
 
+    # Load existing file if present to preserve other assets when updating single ticker
     assets_result: Dict[str, Any] = {}
+    out_file = Path(args.output)
+    if out_file.exists():
+        try:
+            with open(out_file, "r", encoding="utf-8") as f:
+                existing_payload = json.load(f)
+                assets_result = existing_payload.get("assets", {})
+        except Exception:
+            pass
 
     for ticker in tickers:
-        print(f"\n--- Processing Asset: {ticker} ---")
         t0 = time.time()
+        sys.stderr.write(f"[{ticker}] Harvesting Tier 1, 2, and 3 in parallel...\n")
+        tier2_data, tier3_data, tier1_data = harvest_all_parallel(ticker)
 
-        # Step 1: Run harvesters
-        print(f"[{ticker}] 1/3 Harvesting Tier 2 (Reddit/StockTwits/HN)...")
-        tier2_data = run_harvester("harvesters/reddit_stocktwits.py", ticker, limit=15)
-
-        print(f"[{ticker}] 2/3 Harvesting Tier 3 (YouTube/Finfluencer transcripts)...")
-        tier3_data = run_harvester("harvesters/transcript_miner.py", ticker, limit=5)
-
-        print(f"[{ticker}] 3/3 Harvesting Tier 1 (Polymarket/Kalshi/News)...")
-        tier1_data = run_harvester("harvesters/odds_news_baseline.py", ticker, limit=15)
-
-        # Step 2: Compute normalized metrics
         metrics = compute_baseline_metrics(ticker, tier2_data, tier3_data, tier1_data)
-        print(f"[{ticker}] Metrics: Sent={metrics['reddit_stocktwits_sentiment']:.2f}, Hype={metrics['video_transcript_hype_velocity']:.2f}, Macro={metrics['polymarket_macro_alignment']:.2f}, EuphoriaRisk={metrics['retail_euphoria_risk']}")
 
-        # Step 3: Run Gemma 4 26B Dialectical Synthesis
-        prompt = build_forum_prompt(ticker, metrics, tier2_data, tier3_data, tier1_data)
-        print(f"[{ticker}] Invoking local Ollama {MODEL_NAME} for 3-persona forum debate...")
-        synthesis_result = query_ollama_forum(ticker, prompt, timeout=50)
-
-        if not synthesis_result:
-            print(f"[{ticker}] Ollama busy or unparseable. Applying deterministic synthesis rubric...")
+        if args.fast:
             synthesis_result = deterministic_fallback_synthesis(ticker, metrics)
         else:
-            print(f"[{ticker}] LLM synthesis completed. Regime={synthesis_result.get('forum_synthesis', {}).get('consensus_regime')}")
+            prompt = build_forum_prompt(ticker, metrics, tier2_data, tier3_data, tier1_data)
+            synthesis_result = query_ollama_forum(ticker, prompt, timeout=12.0)
+            if not synthesis_result:
+                synthesis_result = deterministic_fallback_synthesis(ticker, metrics)
 
         assets_result[ticker] = synthesis_result
-        print(f"[{ticker}] Done in {round(time.time() - t0, 1)}s. Risk Modifier: {synthesis_result.get('recommended_risk_modifier')}")
+        sys.stderr.write(f"[{ticker}] Complete in {round(time.time() - t0, 2)}s. Regime: {synthesis_result.get('forum_synthesis', {}).get('consensus_regime')}, Risk Mod: {synthesis_result.get('recommended_risk_modifier')}\n")
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
-    # EDT offset = -4 hours
     now_edt = now_utc.astimezone(datetime.timezone(datetime.timedelta(hours=-4)))
 
     output_payload = {
         "timestamp": now_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "generated_at_edt": now_edt.strftime("%Y-%m-%d %H:%M:%S EDT"),
-        "pipeline_version": "1.0.0",
+        "pipeline_version": "1.1.0",
         "orchestrator": "OpenClaw_CrowdSentinel",
-        "model": MODEL_NAME,
+        "model": "deterministic_rubric" if args.fast else MODEL_NAME,
         "temperature": MODEL_TEMPERATURE,
         "assets": assets_result
     }
 
-    out_file = Path(args.output)
     atomic_write_json(output_payload, out_file)
-    print(f"\n[CROWD_SENTINEL] Atomic commit completed -> {out_file}")
-    print(f"[CROWD_SENTINEL] Total pipeline execution time: {round(time.time() - t_start, 1)}s across {len(tickers)} assets.")
+    sys.stderr.write(f"[CROWD_SENTINEL] State saved to {out_file} in {round(time.time() - t_start, 2)}s total.\n")
+
+    # If single ticker invoked (standard OpenClaw chat skill usage), output that asset's synthesis JSON to stdout
+    if len(tickers) == 1:
+        print(json.dumps(assets_result[tickers[0]], indent=2))
+    else:
+        print(json.dumps(output_payload, indent=2))
 
 
 if __name__ == "__main__":

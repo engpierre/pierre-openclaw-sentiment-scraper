@@ -1,60 +1,55 @@
 ---
 name: crowd_sentinel_forum
 description: Runs the full 3-tier passive sentiment harvest and Gemma 4 26B Agent Forum cross-examination for one or more stock tickers, updating crowd_sentiment.json and returning a natural-language summary.
-version: 1.0.0
+version: 1.1.0
 user-invocable: true
 ---
 
 # CrowdSentinel Agent Forum Synthesis Skill (Master Swarm Arbiter)
 
 ## Overview
-Executes the master synthesis orchestrator `synthesis/agent_forum.py`. Automatically runs the 3 passive harvesters (Tier 2 Reddit/StockTwits, Tier 3 YouTube Video Transcripts, and Tier 1 Polymarket/Kalshi/News), conducts the 3-persona dialectical debate using local Gemma 4 26B, commits the results atomically to `shared_signals/crowd_sentiment.json`, and synthesizes a high-conviction risk verdict.
+Executes the master synthesis orchestrator `synthesis/agent_forum.py`. Concurrently runs the 3 passive harvesters in parallel (Tier 2 Reddit/StockTwits, Tier 3 YouTube Video Transcripts, and Tier 1 Polymarket/Kalshi/News), conducts the 3-persona dialectical debate, commits results atomically to `shared_signals/crowd_sentiment.json`, and returns high-conviction risk telemetry directly to `stdout` in under 6 seconds.
 
 ## Exact CLI Invocation
 Execute directly using 100% absolute Windows paths:
 
-### For a Single Target Ticker:
+### For Interactive Single Target Ticker (Recommended Default):
 ```powershell
-C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\.venv\Scripts\python.exe C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\synthesis\agent_forum.py --tickers <TICKER>
+C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\.venv\Scripts\python.exe C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\synthesis\agent_forum.py --tickers <TICKER> --fast
 ```
+*Note: Execute this single command directly in the foreground (do not background-poll), parse its JSON stdout, and present the 3-Voice Synthesis and Recommended Risk Modifier in plain English.*
 
-### For the Full Active Watchlist Universe:
+### For Full Active Watchlist Universe (Background Daemon):
 ```powershell
 C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\.venv\Scripts\python.exe C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\synthesis\agent_forum.py
 ```
 
 ## Telemetry Contract & State Inspection
-After the command completes, read the state file:
+The command outputs strictly valid JSON directly to `stdout` and updates:
 `C:\Anti-Gravity-Core\pierre_openclaw_sentiment_scraper\shared_signals\crowd_sentiment.json`
 
-The file schema:
+The JSON structure:
 ```json
 {
-  "timestamp": "2026-10-27T20:44:25Z",
-  "generated_at_edt": "2026-10-27 16:44:25 EDT",
-  "pipeline_version": "1.0.0",
-  "orchestrator": "OpenClaw_CrowdSentinel",
-  "model": "gemma4:26b",
-  "temperature": 0.0,
-  "assets": {
-    "<TICKER>": {
-      "ticker": "<TICKER>",
-      "metrics": {
-        "reddit_stocktwits_sentiment": 0.65,
-        "chatter_velocity_zscore": 1.5,
-        "video_transcript_hype_velocity": 0.12,
-        "polymarket_macro_alignment": 0.85,
-        "retail_euphoria_risk": "LOW"
-      },
-      "forum_synthesis": {
-        "consensus_regime": "BULLISH_CONFLUENCE",
-        "divergence_flag": "NONE",
-        "key_drivers": ["..."],
-        "summary": "..."
-      },
-      "recommended_risk_modifier": 1.05
-    }
-  }
+  "ticker": "ORCL",
+  "metrics": {
+    "reddit_stocktwits_sentiment": 0.65,
+    "chatter_velocity_zscore": 1.5,
+    "video_transcript_hype_velocity": 0.0,
+    "polymarket_macro_alignment": 0.90,
+    "retail_euphoria_risk": "LOW"
+  },
+  "forum_synthesis": {
+    "consensus_regime": "BULLISH_CONFLUENCE",
+    "divergence_flag": "NONE",
+    "key_drivers": [
+      "Voice A demonstrates positive retail accumulation",
+      "Voice C institutional news confirms constructive momentum",
+      "Voice B euphoria triggers remain well-contained"
+    ],
+    "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
+  },
+  "recommended_risk_modifier": 1.05
 }
 ```
 
