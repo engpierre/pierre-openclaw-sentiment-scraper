@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-27T10:00:00Z",
-  "generated_at_edt": "2026-10-27 06:00:00 EDT",
+  "timestamp": "2026-10-27T20:44:25Z",
+  "generated_at_edt": "2026-10-27 16:44:25 EDT",
   "pipeline_version": "1.0.0",
   "orchestrator": "OpenClaw_CrowdSentinel",
   "model": "gemma4:26b",
@@ -9,86 +9,86 @@
     "ORCL": {
       "ticker": "ORCL",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.58,
-        "chatter_velocity_zscore": 0.45,
-        "video_transcript_hype_velocity": 0.32,
-        "polymarket_macro_alignment": 0.62,
+        "reddit_stocktwits_sentiment": 0.5909,
+        "chatter_velocity_zscore": 1.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.9,
         "retail_euphoria_risk": "LOW"
       },
       "forum_synthesis": {
         "consensus_regime": "STEADY_ACCUMULATION",
         "divergence_flag": "NONE",
         "key_drivers": [
-          "Reddit enterprise cloud infrastructure chatter stable",
-          "Low finfluencer video hype and absence of speculative calls",
-          "Kalshi enterprise software revenue contracts pricing steady guidance"
+          "Voice A forum sentiment stable at 0.59",
+          "Voice B video transcript hype well-contained at 0.00",
+          "Voice C macro alignment in balance at 0.90"
         ],
-        "summary": "Moderate institutional and retail accumulation with low speculative hype. Macro and social indicators remain in mutual equilibrium."
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
       },
       "recommended_risk_modifier": 1.0
     },
     "NVDA": {
       "ticker": "NVDA",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.82,
-        "chatter_velocity_zscore": 2.45,
-        "video_transcript_hype_velocity": 0.88,
-        "polymarket_macro_alignment": 0.38,
-        "retail_euphoria_risk": "EXTREME"
-      },
-      "forum_synthesis": {
-        "consensus_regime": "RETAIL_EUPHORIA_EXTREME",
-        "divergence_flag": "MACRO_SENTIMENT_DIVERGENCE",
-        "key_drivers": [
-          "TikTok finfluencer call option volume mentions spiking +220%",
-          "StockTwits message polarity reaching 91% extreme bullish consensus",
-          "Kalshi semiconductor export control contract odds increasing"
-        ],
-        "summary": "Extreme social buzz and video transcript hype are decoupling from cooling macroeconomic contract odds. High vulnerability to liquidity flushes."
-      },
-      "recommended_risk_modifier": 0.5
-    },
-    "MSFT": {
-      "ticker": "MSFT",
-      "metrics": {
-        "reddit_stocktwits_sentiment": 0.64,
-        "chatter_velocity_zscore": 0.85,
-        "video_transcript_hype_velocity": 0.41,
-        "polymarket_macro_alignment": 0.70,
+        "reddit_stocktwits_sentiment": 0.6364,
+        "chatter_velocity_zscore": 1.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.8,
         "retail_euphoria_risk": "LOW"
       },
       "forum_synthesis": {
         "consensus_regime": "BULLISH_CONFLUENCE",
         "divergence_flag": "NONE",
         "key_drivers": [
-          "Consistent positive sentiment on enterprise AI monetization",
-          "Controlled finfluencer hype below euphoria thresholds",
-          "Prediction markets showing strong cloud CapEx expectations"
+          "Voice A demonstrates positive retail accumulation at 0.64",
+          "Voice C institutional news confirms constructive momentum at 0.80",
+          "Voice B euphoria triggers remain within healthy, non-overheated limits"
         ],
-        "summary": "Solid institutional backing corroborated by retail sentiment without overcrowding. Risk profile remains constructive."
+        "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
       },
-      "recommended_risk_modifier": 1.1
+      "recommended_risk_modifier": 1.05
+    },
+    "MSFT": {
+      "ticker": "MSFT",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.8095,
+        "chatter_velocity_zscore": 1.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.75,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "BULLISH_CONFLUENCE",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A demonstrates positive retail accumulation at 0.81",
+          "Voice C institutional news confirms constructive momentum at 0.75",
+          "Voice B euphoria triggers remain within healthy, non-overheated limits"
+        ],
+        "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
+      },
+      "recommended_risk_modifier": 1.05
     },
     "SPY": {
       "ticker": "SPY",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.52,
-        "chatter_velocity_zscore": 1.15,
-        "video_transcript_hype_velocity": 0.55,
-        "polymarket_macro_alignment": 0.54,
-        "retail_euphoria_risk": "MODERATE"
+        "reddit_stocktwits_sentiment": 0.2857,
+        "chatter_velocity_zscore": 1.5,
+        "video_transcript_hype_velocity": 0.1333,
+        "polymarket_macro_alignment": 0.67,
+        "retail_euphoria_risk": "LOW"
       },
       "forum_synthesis": {
-        "consensus_regime": "NEUTRAL_BALANCED",
-        "divergence_flag": "NONE",
+        "consensus_regime": "CAPITULATION_ACCUMULATION",
+        "divergence_flag": "RETAIL_PANIC_DISLOCATION",
         "key_drivers": [
-          "Macro rate expectations evenly divided on Polymarket",
-          "Balanced put/call chatter distribution across r/options and r/stocks",
-          "Broad market narrative focused on election and inflation volatility"
+          "Voice A captures retail capitulation and panic sentiment at 0.29",
+          "Voice B detects near-zero finfluencer interest and negative buzz",
+          "Voice C institutional contracts remain firm with alignment at 0.67"
         ],
-        "summary": "Broad market index reflects balanced hedging flows with no directional retail euphoria. Neutral baseline maintained."
+        "summary": "Retail panic selling has created an asymmetric dislocation while institutional baseline remains stable. Asymmetric risk expansion favored."
       },
-      "recommended_risk_modifier": 1.0
+      "recommended_risk_modifier": 1.15
     }
   }
 }
