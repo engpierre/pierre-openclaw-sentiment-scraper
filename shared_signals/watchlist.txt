@@ -1,0 +1,4 @@
+ORCL
+NVDA
+MSFT
+SPY

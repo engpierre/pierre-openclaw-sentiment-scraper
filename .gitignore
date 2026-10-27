@@ -1,0 +1,41 @@
+# ==============================================================================
+# Pierre OpenClaw Sentiment Scraper — .gitignore
+# ==============================================================================
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python Bytecode & Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Environment Variables, Secrets & Keys
+.env
+*.env
+*.local.env
+*.key
+*.pem
+*.cert
+secrets.json
+auth.json
+
+# Logs, Cache & Temporary Files
+*.log
+logs/
+tmp/
+temp/
+.cache/
+.pytest_cache/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+desktop.ini
