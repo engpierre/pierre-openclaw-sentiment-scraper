@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-28T09:45:13Z",
-  "generated_at_edt": "2026-10-28 05:45:13 EDT",
+  "timestamp": "2026-10-28T10:00:32Z",
+  "generated_at_edt": "2026-10-28 06:00:32 EDT",
   "pipeline_version": "1.1.0",
   "orchestrator": "OpenClaw_CrowdSentinel",
   "model": "deterministic_rubric",
@@ -110,12 +110,12 @@
         "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
       },
       "recommended_risk_modifier": 1.0,
-      "scanned_at": "2026-10-28T09:45:03Z"
+      "scanned_at": "2026-10-28T10:00:06Z"
     },
     "NXE": {
       "ticker": "NXE",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.7805,
+        "reddit_stocktwits_sentiment": 0.775,
         "chatter_velocity_zscore": 4.5,
         "video_transcript_hype_velocity": 0.0,
         "polymarket_macro_alignment": 0.62,
@@ -132,7 +132,51 @@
         "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
       },
       "recommended_risk_modifier": 1.05,
-      "scanned_at": "2026-10-28T09:45:03Z"
+      "scanned_at": "2026-10-28T10:00:06Z"
+    },
+    "OKLO": {
+      "ticker": "OKLO",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 1.0,
+        "chatter_velocity_zscore": 1.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.5,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "STEADY_ACCUMULATION",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A forum sentiment stable at 1.00",
+          "Voice B video transcript hype well-contained at 0.00",
+          "Voice C macro alignment in balance at 0.50"
+        ],
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
+      },
+      "recommended_risk_modifier": 1.0,
+      "scanned_at": "2026-10-28T10:00:06Z"
+    },
+    "SMR": {
+      "ticker": "SMR",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.5,
+        "chatter_velocity_zscore": 0.0,
+        "video_transcript_hype_velocity": 0.2222,
+        "polymarket_macro_alignment": 0.38,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "STEADY_ACCUMULATION",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A forum sentiment stable at 0.50",
+          "Voice B video transcript hype well-contained at 0.22",
+          "Voice C macro alignment in balance at 0.38"
+        ],
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
+      },
+      "recommended_risk_modifier": 1.0,
+      "scanned_at": "2026-10-28T10:00:06Z"
     }
   }
 }
