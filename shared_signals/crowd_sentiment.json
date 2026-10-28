@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-27T21:10:20Z",
-  "generated_at_edt": "2026-10-27 17:10:20 EDT",
+  "timestamp": "2026-10-28T09:45:13Z",
+  "generated_at_edt": "2026-10-28 05:45:13 EDT",
   "pipeline_version": "1.1.0",
   "orchestrator": "OpenClaw_CrowdSentinel",
   "model": "deterministic_rubric",
@@ -9,23 +9,130 @@
     "ORCL": {
       "ticker": "ORCL",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.6667,
+        "reddit_stocktwits_sentiment": 0.6429,
         "chatter_velocity_zscore": 3.0,
         "video_transcript_hype_velocity": 0.0,
-        "polymarket_macro_alignment": 0.9,
+        "polymarket_macro_alignment": 0.71,
         "retail_euphoria_risk": "LOW"
       },
       "forum_synthesis": {
         "consensus_regime": "BULLISH_CONFLUENCE",
         "divergence_flag": "NONE",
         "key_drivers": [
-          "Voice A demonstrates positive retail accumulation at 0.67",
-          "Voice C institutional news confirms constructive momentum at 0.90",
+          "Voice A demonstrates positive retail accumulation at 0.64",
+          "Voice C institutional news confirms constructive momentum at 0.71",
           "Voice B euphoria triggers remain within healthy, non-overheated limits"
         ],
         "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
       },
       "recommended_risk_modifier": 1.05
+    },
+    "MSFT": {
+      "ticker": "MSFT",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.5556,
+        "chatter_velocity_zscore": 1.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.71,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "STEADY_ACCUMULATION",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A forum sentiment stable at 0.56",
+          "Voice B video transcript hype well-contained at 0.00",
+          "Voice C macro alignment in balance at 0.71"
+        ],
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
+      },
+      "recommended_risk_modifier": 1.0
+    },
+    "NVDA": {
+      "ticker": "NVDA",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.64,
+        "chatter_velocity_zscore": 4.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.5,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "STEADY_ACCUMULATION",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A forum sentiment stable at 0.64",
+          "Voice B video transcript hype well-contained at 0.00",
+          "Voice C macro alignment in balance at 0.50"
+        ],
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
+      },
+      "recommended_risk_modifier": 1.0
+    },
+    "SPY": {
+      "ticker": "SPY",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.4286,
+        "chatter_velocity_zscore": 3.0,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.67,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "STEADY_ACCUMULATION",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A forum sentiment stable at 0.43",
+          "Voice B video transcript hype well-contained at 0.00",
+          "Voice C macro alignment in balance at 0.67"
+        ],
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
+      },
+      "recommended_risk_modifier": 1.0
+    },
+    "CCJ": {
+      "ticker": "CCJ",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.5854,
+        "chatter_velocity_zscore": 3.0,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.62,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "STEADY_ACCUMULATION",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A forum sentiment stable at 0.59",
+          "Voice B video transcript hype well-contained at 0.00",
+          "Voice C macro alignment in balance at 0.62"
+        ],
+        "summary": "Balanced market conditions with moderate engagement across social and institutional tiers. Full baseline risk allocation permitted."
+      },
+      "recommended_risk_modifier": 1.0,
+      "scanned_at": "2026-10-28T09:45:03Z"
+    },
+    "NXE": {
+      "ticker": "NXE",
+      "metrics": {
+        "reddit_stocktwits_sentiment": 0.7805,
+        "chatter_velocity_zscore": 4.5,
+        "video_transcript_hype_velocity": 0.0,
+        "polymarket_macro_alignment": 0.62,
+        "retail_euphoria_risk": "LOW"
+      },
+      "forum_synthesis": {
+        "consensus_regime": "BULLISH_CONFLUENCE",
+        "divergence_flag": "NONE",
+        "key_drivers": [
+          "Voice A demonstrates positive retail accumulation at 0.78",
+          "Voice C institutional news confirms constructive momentum at 0.62",
+          "Voice B euphoria triggers remain within healthy, non-overheated limits"
+        ],
+        "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
+      },
+      "recommended_risk_modifier": 1.05,
+      "scanned_at": "2026-10-28T09:45:03Z"
     }
   }
 }

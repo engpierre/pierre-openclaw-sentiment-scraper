@@ -304,29 +304,37 @@ def main():
     parser = argparse.ArgumentParser(description="OpenClaw Agent Forum Synthesis Orchestrator")
     parser.add_argument("--watchlist", type=str, default=str(WATCHLIST_PATH), help="Path to watchlist.txt")
     parser.add_argument("--output", type=str, default=str(OUTPUT_PATH), help="Path to crowd_sentiment.json")
-    parser.add_argument("--tickers", type=str, default="", help="Comma-separated ticker list override")
+    parser.add_argument("--tickers", nargs="*", default=[], help="Comma-separated or space-separated ticker list override")
     parser.add_argument("--fast", "--no-llm", dest="fast", action="store_true", help="Fast mode: parallel harvest + deterministic synthesis (<6s)")
     args = parser.parse_args()
 
-    if args.tickers.strip():
-        tickers = [t.strip().upper() for t in args.tickers.split(",") if t.strip()]
-    else:
+    tickers: List[str] = []
+    if args.tickers:
+        for item in args.tickers:
+            for t in item.replace(",", " ").split():
+                clean_t = t.strip().upper()
+                if clean_t and clean_t not in tickers:
+                    tickers.append(clean_t)
+    if not tickers:
         tickers = load_watchlist(Path(args.watchlist))
 
     mode_label = "FAST (Parallel Harvest + Deterministic Rubric)" if args.fast else "FULL (Ollama 12s Cap + Fallback)"
     sys.stderr.write(f"[CROWD_SENTINEL] Running Forum Synthesis for {len(tickers)} assets in {mode_label} mode.\n")
     t_start = time.time()
 
-    # Load existing file if present to preserve other assets when updating single ticker
+    # Load existing file if present to preserve other assets when updating single ticker or cluster
     assets_result: Dict[str, Any] = {}
     out_file = Path(args.output)
     if out_file.exists():
         try:
             with open(out_file, "r", encoding="utf-8") as f:
                 existing_payload = json.load(f)
-                assets_result = existing_payload.get("assets", {})
-        except Exception:
-            pass
+                if isinstance(existing_payload, dict):
+                    assets_result = existing_payload.get("assets", {}) or {}
+        except Exception as read_err:
+            sys.stderr.write(f"[CROWD_SENTINEL] Warning reading existing state: {read_err}\n")
+
+    now_utc_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     for ticker in tickers:
         t0 = time.time()
@@ -343,6 +351,7 @@ def main():
             if not synthesis_result:
                 synthesis_result = deterministic_fallback_synthesis(ticker, metrics)
 
+        synthesis_result["scanned_at"] = now_utc_str
         assets_result[ticker] = synthesis_result
         sys.stderr.write(f"[{ticker}] Complete in {round(time.time() - t0, 2)}s. Regime: {synthesis_result.get('forum_synthesis', {}).get('consensus_regime')}, Risk Mod: {synthesis_result.get('recommended_risk_modifier')}\n")
 
@@ -360,7 +369,7 @@ def main():
     }
 
     atomic_write_json(output_payload, out_file)
-    sys.stderr.write(f"[CROWD_SENTINEL] State saved to {out_file} in {round(time.time() - t_start, 2)}s total.\n")
+    sys.stderr.write(f"[CROWD_SENTINEL] State saved to {out_file} in {round(time.time() - t_start, 2)}s total. Assets tracked: {len(assets_result)}\n")
 
     # If single ticker invoked (standard OpenClaw chat skill usage), output that asset's synthesis JSON to stdout
     if len(tickers) == 1:

@@ -1,40 +1,57 @@
-OXY
-PFE
-DVN
+# Pierre 40-Asset Universe - Thematic Clusters
+
+# Cluster 1: Defense & Government Contracts (5)
 LDOS
-EW
-KMI
-BSX
-ETR
-ACM
 LHX
 HII
-NEE
-WMB
 TXT
-CELH
-BMY
-GEN
-NVO
+ACM
+
+# Cluster 2: Energy, Midstream & Pipelines (6)
+OXY
+DVN
+KMI
+WMB
 BKR
-BTC-USD
 ENB
-UBER
-EH
-NEM
+
+# Cluster 3: Power & Utilities (3)
+ETR
+NEE
+VST
+
+# Cluster 4: Healthcare, Bio & Devices (6)
+PFE
+EW
+BSX
+BMY
+NVO
+HIMS
+
+# Cluster 5: Nuclear & Uranium Infrastructure (4)
+CCJ
+NXE
+OKLO
+SMR
+
+# Cluster 6: Big Tech, Fintech & Platforms (6)
 META
 GOOGL
-FCX
-NXE
-HIMS
-VST
-KWEB
-JOBY
-IONQ
+UBER
+GEN
 SOFI
-CCJ
-ABTC
-OKLO
-MOS
-SMR
+KWEB
+
+# Cluster 7: Next-Gen Tech & Robotics (5)
+IONQ
+JOBY
+EH
 RR
+CELH
+
+# Cluster 8: Crypto, Mining & Commodities (5)
+BTC-USD
+ABTC
+NEM
+FCX
+MOS
