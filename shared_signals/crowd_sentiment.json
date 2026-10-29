@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-10-29T11:00:20Z",
-  "generated_at_edt": "2026-10-29 07:00:20 EDT",
+  "timestamp": "2026-10-29T19:13:27Z",
+  "generated_at_edt": "2026-10-29 15:13:27 EDT",
   "pipeline_version": "1.1.0",
   "orchestrator": "OpenClaw_CrowdSentinel",
   "model": "deterministic_rubric",
@@ -383,7 +383,7 @@
     "ENB": {
       "ticker": "ENB",
       "metrics": {
-        "reddit_stocktwits_sentiment": 0.8571,
+        "reddit_stocktwits_sentiment": 0.8214,
         "chatter_velocity_zscore": 3.0,
         "video_transcript_hype_velocity": 0.0,
         "polymarket_macro_alignment": 0.9,
@@ -393,14 +393,14 @@
         "consensus_regime": "BULLISH_CONFLUENCE",
         "divergence_flag": "NONE",
         "key_drivers": [
-          "Voice A demonstrates positive retail accumulation at 0.86",
+          "Voice A demonstrates positive retail accumulation at 0.82",
           "Voice C institutional news confirms constructive momentum at 0.90",
           "Voice B euphoria triggers remain within healthy, non-overheated limits"
         ],
         "summary": "Constructive multi-tier confluence between retail sentiment and institutional baseline with subdued speculative frenzy."
       },
       "recommended_risk_modifier": 1.05,
-      "scanned_at": "2026-10-29T11:00:15Z"
+      "scanned_at": "2026-10-29T19:13:21Z"
     },
     "META": {
       "ticker": "META",
