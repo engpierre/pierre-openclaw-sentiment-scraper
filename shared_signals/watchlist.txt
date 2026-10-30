@@ -49,9 +49,10 @@ EH
 RR
 CELH
 
-# Cluster 8: Crypto, Mining & Commodities (5)
+# Cluster 8: Crypto, Mining & Commodities (6)
 BTC-USD
 ABTC
 NEM
 FCX
 MOS
+PAAS
